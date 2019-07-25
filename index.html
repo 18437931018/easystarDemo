@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .div1 {
+        background-color: antiquewhite;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        border: 1px solid #F00;
+    }
+
+    .div2 {
+        background-color: aqua;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        border: 1px solid #F00;
+    }
+
+    .div3 {
+        background-color: blue;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+    }
+</style>
+
+<body>
+    <script src="./easystar.js"></script>
+    <script>
+        const easystar = new EasyStar.js();
+        let grid = [
+            [0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+        ];
+        easystar.setGrid(grid);
+        easystar.setAcceptableTiles([0]);
+        easystar.setIterationsPerCalculation(1000);
+        function createDiv(classs, r, c) {
+            let div = document.createElement("div");
+            div.className = classs;
+            let x = r * 50;
+            let y = c * 50;
+            div.style.left = x + 'px';
+            div.style.top = y + 'px';
+            document.body.appendChild(div);
+        }
+
+        grid.forEach((v, i) => {
+            v.forEach((v2, i2) => {
+                if (v2 === 0)
+                    createDiv('div1', i2, i);
+                else
+                    createDiv('div2', i2, i);
+            })
+        })
+
+        let startX = 0;
+        let startY = 0;
+        let endX = 23;
+        let endY = 13;
+        easystar.findPath(startX, startY, endX, endY, function (path) {
+            if (path === null) {
+                alert("Path was not found.");
+            } else {
+                let l = path.length;
+                let i = 0;
+                let role = document.getElementById('role');
+                function walk() {
+                    console.log('walk...')
+                    setTimeout(() => {
+                        let p = path[i];
+                        i++;
+                        role.style.left = p.x * 50 + 'px';
+                        role.style.top = p.y * 50 + 'px';
+                        console.log(p);
+                        if (i < l)
+                            walk();
+                    }, 100)
+                }
+                walk();
+            }
+        });
+        easystar.calculate();
+    </script>
+    <div class="div3" id="role"></div>
+</body>
+
+</html>
